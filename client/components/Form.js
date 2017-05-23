@@ -13,11 +13,14 @@ export default class Form extends Component {
       toYear: 2014,
       rain: false,
       sunshine: false,
+      airfrost: false,
       maxTemp: false,
       minTemp: false,
-      filteredData: []
+      filteredData: [],
+      error: ""
     };
   }
+
   componentWillMount() {
     for(var i = 0; i < myData.length; i++){
       var obj = myData[i];
@@ -28,15 +31,35 @@ export default class Form extends Component {
       }
     }
   }
+
+  _checkYears(from, to){
+    if (to < from) {
+      this.setState({
+        toYear: parseInt(from) + 1,
+        error: "Comparison year can't be earlier than the start year"
+      }, () => {
+        console.log(this.state);
+      })
+    } else {
+      this.setState({
+        error: ""
+      })
+    }
+  }
+
   _onFromYearChange(e) {
     this.setState({
       fromYear: e.target.value
+    }, () => {
+      this._checkYears(this.state.fromYear, this.state.toYear)
     });
   }
 
   _onToYearChange(e) {
     this.setState({
       toYear: e.target.value
+    }, () => {
+      this._checkYears(this.state.fromYear, this.state.toYear)
     });
   }
 
@@ -61,6 +84,12 @@ export default class Form extends Component {
   _onSunshineChange(e) {
     this.setState({
       sunshine: !this.state.sunshine
+    }, () => {console.log(this.state);})
+  }
+
+  _onAirfrostChange(e) {
+    this.setState({
+      airfrost: !this.state.airfrost
     });
   }
 
@@ -82,31 +111,43 @@ export default class Form extends Component {
     }
   }
 
+  _removeAirfrost(data) {
+    if(this.state.airfrost === false) {
+      delete data['air_frost']
+    }
+  }
+
   _removeRain(data) {
     if(this.state.rain === false) {
       delete data['rain_mm']
     }
   }
-  _checkSelected(data) {
+  _checkSelectedFields(data) {
     this._removeRain(data)
     this._removeSunshine(data)
     this._removeMinC(data)
     this._removeMaxC(data)
+    this._removeAirfrost(data)
   }
 
   _onButtonClick(fromYear, toYear) {
-    let newData = [];
-    myData.filter((x) => {
-      if (x.yyyy >= toYear && x.yyyy <= fromYear) {
-        this._checkSelected(x)
-        return newData.push(x);
-      }
-    });
-    this.setState({
-      filteredData: newData
-    }, () => {
-      console.log(this.state.filteredData);
-    })
+    if (Object.values(this.state).includes(true)) {
+      const newData = [];
+      myData.map((x) => {
+        if (x.yyyy >= toYear && x.yyyy <= fromYear) {
+          this._checkSelectedFields(x)
+          return newData.push(x);
+        }
+      });
+      this.setState({
+        filteredData: newData,
+        error: ""
+      }, () => {})
+    } else {
+      this.setState({
+        error: "Please select at least one stats"
+      })
+    }
   }
 
   render() {
@@ -117,8 +158,10 @@ export default class Form extends Component {
     }
 
     return (
-      <div>
-        <Chart data={this.state.filteredData}/>
+      <div className="row">
+        <div>
+          <Chart data={this.state.filteredData}/>
+        </div>
         <div>
           <FormGroup controlId="formControlsSelect" onChange={this._onFromYearChange.bind(this)}>
             <FormControl componentClass="select" value={this.state.fromYear} placeholder="select">
@@ -141,6 +184,9 @@ export default class Form extends Component {
           </Checkbox>
           <Checkbox onChange={this._onSunshineChange.bind(this)}>
             sunshine hours
+          </Checkbox>
+          <Checkbox onChange={this._onAirfrostChange.bind(this)}>
+            air frost
           </Checkbox>
           <Button onClick={() => this._onButtonClick(this.state.toYear, this.state.fromYear)}>
             Display
