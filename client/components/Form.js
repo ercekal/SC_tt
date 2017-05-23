@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {FormGroup, FormControl, Checkbox, Button} from 'react-bootstrap';
 import myData from '../heathrow-weatherstation.json';
-import Chart from './Chart.js'
+import Chart from './Chart.js';
 
 export default class Form extends Component {
 
@@ -15,6 +15,7 @@ export default class Form extends Component {
       sunshine: false,
       maxTemp: false,
       minTemp: false,
+      filteredData: []
     };
   }
 
@@ -55,17 +56,20 @@ export default class Form extends Component {
   }
 
   _onButtonClick(fromYear, toYear) {
-    let filteredData = []
+    let newData = [];
     myData.filter((x) => {
       if (x.yyyy >= toYear && x.yyyy <= fromYear) {
-        filteredData.push(x)
+        return newData.push(x);
       }
     });
+    this.setState({
+      filteredData: newData
+    })
+    console.log(this.state.filteredData);
   }
 
   render() {
 
-    let filteredData = []
     let years = [];
     for (var i = 1958; i < 2015; i++) {
       years.push(<option value={i} key={i}>{i}</option>);
@@ -73,7 +77,7 @@ export default class Form extends Component {
 
     return (
       <div>
-        <Chart data={filteredData}/>
+        <Chart data={this.state.filteredData}/>
         <div>
           <FormGroup controlId="formControlsSelect" onChange={this._onFromYearChange.bind(this)}>
             <FormControl componentClass="select" value={this.state.fromYear} placeholder="select">
