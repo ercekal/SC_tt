@@ -62,10 +62,10 @@ export default class Form extends Component {
         return newData.push(x);
       }
     });
+    console.log(newData);
     this.setState({
       filteredData: newData
     })
-    console.log(this.state.filteredData);
   }
 
   render() {
