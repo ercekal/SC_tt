@@ -64,10 +64,41 @@ export default class Form extends Component {
     });
   }
 
+  _removeMaxC(data) {
+    if(this.state.maxTemp === false) {
+      delete data['tmax_C']
+    }
+  }
+
+  _removeMinC(data) {
+    if(this.state.minTemp === false) {
+      delete data['tmin_C']
+    }
+  }
+
+  _removeSunshine(data) {
+    if(this.state.sunshine === false) {
+      delete data['sunshine_hours']
+    }
+  }
+
+  _removeRain(data) {
+    if(this.state.rain === false) {
+      delete data['rain_mm']
+    }
+  }
+  _checkSelected(data) {
+    this._removeRain(data)
+    this._removeSunshine(data)
+    this._removeMinC(data)
+    this._removeMaxC(data)
+  }
+
   _onButtonClick(fromYear, toYear) {
     let newData = [];
     myData.filter((x) => {
       if (x.yyyy >= toYear && x.yyyy <= fromYear) {
+        this._checkSelected(x)
         return newData.push(x);
       }
     });
