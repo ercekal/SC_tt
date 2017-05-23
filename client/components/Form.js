@@ -18,7 +18,16 @@ export default class Form extends Component {
       filteredData: []
     };
   }
-
+  componentWillMount() {
+    for(var i = 0; i < myData.length; i++){
+      var obj = myData[i];
+      for(var prop in obj){
+        if(obj.hasOwnProperty(prop) && !isNaN(obj[prop])){
+          obj[prop] = +obj[prop];
+        }
+      }
+    }
+  }
   _onFromYearChange(e) {
     this.setState({
       fromYear: e.target.value
@@ -62,9 +71,10 @@ export default class Form extends Component {
         return newData.push(x);
       }
     });
-    console.log(newData);
     this.setState({
       filteredData: newData
+    }, () => {
+      console.log(this.state.filteredData);
     })
   }
 
