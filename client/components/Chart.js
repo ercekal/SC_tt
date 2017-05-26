@@ -21,9 +21,9 @@ const SimpleLineChart = (props) => {
         <Legend />
         <Line type="monotone" dataKey="rain_mm" stroke="#8884d8" activeDot={{r: 8}}/>
         <Line type="monotone" dataKey="sunshine_hours" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="tmax_C" stroke="#43ca9d" />
-        <Line type="monotone" dataKey="tmin_C" stroke="#35ca9d" />
-        <Line type="monotone" dataKey="air_frost" stroke="#15ca9d" />
+        <Line type="monotone" dataKey="tmax_C" stroke="red" />
+        <Line type="monotone" dataKey="tmin_C" stroke="black" />
+        <Line type="monotone" dataKey="air_frost" stroke="yellow" />
       </LineChart>
     )
   }

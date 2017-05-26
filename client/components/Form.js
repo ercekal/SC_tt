@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 import React, {Component} from 'react';
 import {FormGroup, FormControl, Checkbox, Button} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-flexbox-grid';
 import myData from '../heathrow-weatherstation.json';
 import Chart from './Chart.js';
 
@@ -158,40 +159,49 @@ export default class Form extends Component {
     }
 
     return (
-      <div className="row">
-        <div>
-          <Chart data={this.state.filteredData}/>
-        </div>
-        <div>
-          <FormGroup controlId="formControlsSelect" onChange={this._onFromYearChange.bind(this)}>
-            <FormControl componentClass="select" value={this.state.fromYear} placeholder="select">
-              {years}
-            </FormControl>
-          </FormGroup>
-          <FormGroup controlId="formControlsSelect" onChange={this._onToYearChange.bind(this)}>
-            <FormControl componentClass="select" value={this.state.toYear} placeholder="select">
-              {years}
-            </FormControl>
-          </FormGroup>
-          <Checkbox onChange={this._onMaxTempChange.bind(this)}>
-            temp max C
-          </Checkbox>
-          <Checkbox onChange={this._onMinTempChange.bind(this)}>
-            temp min C
-          </Checkbox>
-          <Checkbox onChange={this._onRainChange.bind(this)}>
-            rain mm
-          </Checkbox>
-          <Checkbox onChange={this._onSunshineChange.bind(this)}>
-            sunshine hours
-          </Checkbox>
-          <Checkbox onChange={this._onAirfrostChange.bind(this)}>
-            air frost
-          </Checkbox>
-          <Button onClick={() => this._onButtonClick(this.state.toYear, this.state.fromYear)}>
-            Display
-          </Button>
-        </div>
+      <div id="mainDiv">
+        <Grid>
+          <Row>
+            <Col xs>
+              <Chart data={this.state.filteredData}/>
+            </Col>
+            <Col xs>
+              <Row>
+                <FormGroup controlId="formControlsSelect" onChange={this._onFromYearChange.bind(this)}>
+                  <FormControl componentClass="select" value={this.state.fromYear} placeholder="select">
+                    {years}
+                  </FormControl>
+                </FormGroup>
+                <FormGroup controlId="formControlsSelect" onChange={this._onToYearChange.bind(this)}>
+                  <FormControl componentClass="select" value={this.state.toYear} placeholder="select">
+                    {years}
+                  </FormControl>
+                </FormGroup>
+              </Row>
+              <Checkbox onChange={this._onMaxTempChange.bind(this)}>
+                temp max C
+              </Checkbox>
+              <Checkbox onChange={this._onMinTempChange.bind(this)}>
+                temp min C
+              </Checkbox>
+              <Checkbox onChange={this._onRainChange.bind(this)}>
+                rain mm
+              </Checkbox>
+              <Checkbox onChange={this._onSunshineChange.bind(this)}>
+                sunshine hours
+              </Checkbox>
+              <Checkbox onChange={this._onAirfrostChange.bind(this)}>
+                air frost
+              </Checkbox>
+              <Button onClick={() => this._onButtonClick(this.state.toYear, this.state.fromYear)}>
+                Display
+              </Button>
+              <div>
+                {this.state.error}
+              </div>
+            </Col>
+          </Row>
+        </Grid>
       </div>
     )
   }
